@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for both customers and service providers",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "photoURL": { "type": "string", "format": "uri" },
+        "role": { "type": "string", "enum": ["customer", "provider", "admin"] },
+        "location": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "category": { "type": "string", "description": "Service category for providers" },
+        "bio": { "type": "string" },
+        "trustScore": { "type": "number", "description": "Dynamic score 0-100" },
+        "verificationStatus": { "type": "string", "enum": ["none", "pending", "verified"] },
+        "completedJobs": { "type": "number" },
+        "responseTime": { "type": "number", "description": "Average response time in minutes" },
+        "badges": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Service provider review",
+      "type": "object",
+      "properties": {
+        "providerId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "rating": { "type": "number" },
+        "text": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "helpfulCount": { "type": "number" },
+        "reported": { "type": "boolean" },
+        "sentiment": { "type": "string", "enum": ["positive", "neutral", "negative"] },
+        "summary": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["providerId", "customerId", "rating"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Service booking request",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "providerId": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["requested", "accepted", "completed", "cancelled"] },
+        "price": { "type": "number" },
+        "currency": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "providerId", "date", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message",
+      "type": "object",
+      "properties": {
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "image": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["chatId", "senderId", "createdAt"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "Chat metadata",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["participants", "updatedAt"]
+    },
+    "FraudAlert": {
+      "title": "FraudAlert",
+      "description": "Suspicious activity alert",
+      "type": "object",
+      "properties": {
+        "targetId": { "type": "string", "description": "ID of user or review" },
+        "type": { "type": "string", "enum": ["duplicate_review", "rating_spike", "bot_pattern"] },
+        "reason": { "type": "string" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["targetId", "type", "severity"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/reviews/{reviewId}": { "schema": "Review", "description": "Provider reviews" },
+    "/bookings/{bookingId}": { "schema": "Booking", "description": "Service bookings" },
+    "/chats/{chatId}": { "schema": "Chat", "description": "Chat sessions" },
+    "/chats/{chatId}/messages/{messageId}": { "schema": "Message", "description": "Chat messages" },
+    "/fraudAlerts/{alertId}": { "schema": "FraudAlert", "description": "Fraud detection alerts" }
+  }
+}

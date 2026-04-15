@@ -1,0 +1,7 @@
+{
+  "name": "Remix: Trust-Based Service Finder",
+  "description": "A modern platform connecting users with reliable local service providers using a dynamic trust scoring system and AI-powered reviews.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
